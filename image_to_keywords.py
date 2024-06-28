@@ -6,6 +6,7 @@ from fastapi import FastAPI, UploadFile, File
 from featuring_keywords import dict_keywords
 from io import BytesIO
 
+
 app = FastAPI()
 
 # 피처링 정의 키워드 추출
@@ -13,9 +14,7 @@ keywords = list(dict_keywords.keys())
 
 # # CLIP 모델 로드
 device = "cuda" if torch.cuda.is_available() else "cpu"
-# model, preprocess = clip.load("ViT-B/32", device=device)
-model_path = "/home/ec2-user"
-model, preprocess = clip.load("ViT-B/32", device=device, download_root=model_path)
+model, preprocess = clip.load("ViT-B/32", device=device)
 
 def image_to_keywords(image: Image.Image):
     """
@@ -56,8 +55,3 @@ async def extract_keywords(file: UploadFile = File(...)):
     # 키워드 추출
     result = image_to_keywords(image)
     return result
-
-
-# if __name__ == "__main__":
-#     import uvicorn
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
